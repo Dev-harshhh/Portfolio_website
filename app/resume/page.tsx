@@ -181,7 +181,7 @@ export default function Resume() {
           <h2 className="text-2xl font-bold gradient-text mb-6">Professional Summary</h2>
           <div className="glass rounded-xl p-6">
             <p className="text-gray-300 leading-relaxed">
-              2nd-year CSE student at Chandigarh University. Patent-published innovator and hands-on web developer with leadership roles in TPP CR and university event coordination. Passionate about AI, practical tech solutions, and leadership growth.
+              3rd-year CSE student at Chandigarh University. Patent-published innovator and hands-on web developer with leadership roles in TPP CR and university event coordination. Passionate about AI, practical tech solutions, and leadership growth.
             </p>
           </div>
         </motion.section>

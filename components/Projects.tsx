@@ -1,74 +1,79 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 import { ExternalLink, Github, ArrowRight } from 'lucide-react';
 
 const Projects = () => {
-  const containerRef = useRef(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll progress for this section only (doesn't block page scroll)
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
+    target: sectionRef,
+    offset: ['start 80%', 'end 20%'], // starts when section comes into view
   });
 
-  // Transform scroll progress to horizontal translation
-  // Assuming each card is ~400px wide with gaps, we need to move ~2400px total for 6 cards
-  const x = useTransform(scrollYProgress, [0, 1], [0, -2400]);
+  // Smooth the progress so movement feels fluid
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    mass: 0.3,
+  });
+
+  // Horizontal movement mapped to smoothed progress
+  const x = useTransform(smoothProgress, [0, 1], [0, -700]);
 
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      description: 'A full-stack e-commerce solution with React, Node.js, and Stripe integration. Features include user authentication, product management, and order processing.',
-      image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=600',
+      title: 'Dual Channel E-Commerce Platform',
+      description:
+        'A full-stack e-commerce solution with React, Node.js, and Stripe integration. Features include user authentication, product management, and order processing.',
+      image:
+        'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=600',
       tech: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-      github: 'https://github.com/johndoe/ecommerce',
+      github: 'https://github.com/Dev-harshhh/ecommerce',
       demo: 'https://ecommerce-demo.com',
     },
     {
-      title: 'Task Management App',
-      description: 'A collaborative task management application with real-time updates, team collaboration features, and advanced project tracking capabilities.',
-      image: 'https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=600',
-      tech: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind'],
-      github: 'https://github.com/johndoe/taskapp',
-      demo: 'https://taskapp-demo.com',
-    },
-    {
-      title: 'Weather Dashboard',
-      description: 'A beautiful weather dashboard with location-based forecasts, interactive maps, and detailed weather analytics with data visualization.',
-      image: 'https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=600',
+      title: 'Quiz Application',
+      description:
+        'A fun and interactive quiz application built with React and TypeScript, featuring multiple-choice questions, timers, and score tracking.',
+      image:
+        'https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=600',
       tech: ['React', 'Chart.js', 'OpenWeather API', 'CSS Grid'],
-      github: 'https://github.com/johndoe/weather',
+      github: 'https://github.com/Dev-harshhh/quiz-app-SIP/tree/main',
       demo: 'https://weather-demo.com',
     },
     {
-      title: 'Social Media Dashboard',
-      description: 'A comprehensive social media management platform with analytics, scheduling, and multi-platform posting capabilities.',
-      image: 'https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=600',
-      tech: ['Vue.js', 'Firebase', 'Chart.js', 'Tailwind'],
-      github: 'https://github.com/johndoe/social-dashboard',
-      demo: 'https://social-demo.com',
-    },
-    {
-      title: 'AI Chat Application',
-      description: 'An intelligent chat application with natural language processing, real-time messaging, and AI-powered responses.',
-      image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=600',
-      tech: ['React', 'OpenAI API', 'Socket.io', 'MongoDB'],
-      github: 'https://github.com/johndoe/ai-chat',
+      title: 'AI Enabled Gesture Air Brush',
+      description:
+        'An innovative air brush tool that uses AI to enhance digital art creation with real-time feedback and suggestions.',
+      image:
+        'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=600',
+      tech: ['React', 'OpenAI API', 'TensorFlow.js', 'CSS Modules'],
+      github: 'https://github.com/Dev-harshhh/Hand_Gesture_Writing',
       demo: 'https://ai-chat-demo.com',
     },
     {
       title: 'Portfolio Website',
-      description: 'A modern, responsive portfolio website with smooth animations, dark mode support, and optimized performance.',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600',
+      description:
+        'A modern, responsive portfolio website with smooth animations, dark mode support, and optimized performance.',
+      image:
+        'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600',
       tech: ['Next.js', 'Framer Motion', 'Tailwind', 'TypeScript'],
-      github: 'https://github.com/johndoe/portfolio',
+      github: 'https://github.com/Dev-harshhh/Portfolio_website',
       demo: 'https://portfolio-demo.com',
     },
   ];
 
   return (
-    <section id="projects" className="py-20 bg-slate-900 overflow-hidden">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="py-20 bg-slate-900 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -84,72 +89,75 @@ const Projects = () => {
           </p>
         </motion.div>
 
-        {/* Horizontal Scroll Container */}
-        <div ref={containerRef} className="h-[120vh] relative">
-          <div className="sticky top-20 h-screen flex items-center overflow-hidden">
-            <motion.div
-              style={{ x }}
-              className="flex space-x-8 will-change-transform"
-            >
-              {projects.map((project, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  className="glass rounded-2xl overflow-hidden group hover-glow flex-shrink-0 w-80"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
-                    <p className="text-gray-300 mb-4 leading-relaxed text-sm">{project.description}</p>
-                    
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 bg-slate-700 text-xs text-gray-300 rounded-full"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    <div className="flex space-x-4">
-                      <motion.a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.1 }}
-                        className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-200"
+        {/* Horizontal animated row, but page scroll is untouched */}
+        <div className="w-full">
+          <motion.div
+            style={{ x }}
+            className="flex space-x-8 will-change-transform"
+          >
+            {projects.map((project, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="glass rounded-2xl overflow-hidden group hover-glow flex-shrink-0 w-80"
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-3">
+                    {project.title}
+                  </h3>
+                  <p className="text-gray-300 mb-4 leading-relaxed text-sm">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.tech.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-3 py-1 bg-slate-700 text-xs text-gray-300 rounded-full"
                       >
-                        <Github size={18} />
-                        <span className="text-sm">Code</span>
-                      </motion.a>
-                      <motion.a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.1 }}
-                        className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
-                      >
-                        <ExternalLink size={18} />
-                        <span className="text-sm">Demo</span>
-                      </motion.a>
-                    </div>
+                        {tech}
+                      </span>
+                    ))}
                   </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
+
+                  <div className="flex space-x-4">
+                    <motion.a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.1 }}
+                      className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-200"
+                    >
+                      <Github size={18} />
+                      <span className="text-sm">Code</span>
+                    </motion.a>
+                    <motion.a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.1 }}
+                      className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                    >
+                      <ExternalLink size={18} />
+                      <span className="text-sm">Demo</span>
+                    </motion.a>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
 
+        {/* View all button */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -158,7 +166,7 @@ const Projects = () => {
           className="text-center mt-12"
         >
           <motion.a
-            href="https://github.com/johndoe"
+            href="https://github.com/Dev-harshhh"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
