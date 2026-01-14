@@ -12,7 +12,8 @@ const Hero = () => {
       transition: {
         duration: 0.8,
         staggerChildren: 0.2,
-        ease: "easeOut"
+        ease: [0.25, 0.1, 0.25, 1] as const
+
       }
     }
   };
@@ -24,7 +25,7 @@ const Hero = () => {
       opacity: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
+        ease: [0.25, 0.1, 0.25, 1] as const
       }
     }
   };
@@ -45,7 +46,7 @@ const Hero = () => {
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "linear"
+            ease: [0, 0, 1, 1] as const
           }}
           className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/5 rounded-full blur-xl"
         />
@@ -57,7 +58,8 @@ const Hero = () => {
           transition={{
             duration: 25,
             repeat: Infinity,
-            ease: "linear"
+            ease: [0, 0, 1, 1] as const
+
           }}
           className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-purple-500/5 rounded-full blur-xl"
         />
@@ -75,7 +77,7 @@ const Hero = () => {
             variants={itemVariants}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold"
           >
-            H! I'm{' '}
+            H! I&apos;m{' '}
             <span className="gradient-text">
               Harsh
             </span>
@@ -85,7 +87,7 @@ const Hero = () => {
             variants={itemVariants}
             className="text-xl sm:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed"
           >
-            A passionate CSE student with a maker's mindset — passionate
+            A passionate CSE student with a maker&apos;s mindset — passionate
             about building, experimenting, and launching tech that matters.
           </motion.p>
 

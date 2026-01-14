@@ -92,7 +92,7 @@ const Contact = () => {
             Get In <span className="gradient-text">Touch</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Let's discuss your research work, a patent idea, or just contact me for my services!
+            Let&apos;s discuss your research work, a patent idea, or just contact me for my services!
           </p>
         </motion.div>
 
@@ -105,9 +105,9 @@ const Contact = () => {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Let's Connect</h3>
+              <h3 className="text-2xl font-bold text-white mb-6">Let&apos;s Connect</h3>
               <p className="text-gray-300 leading-relaxed mb-8">
-                I'm always open to discussing new opportunities, interesting projects, 
+                I&apos;m always open to discussing new opportunities, interesting projects,
                 or just having a chat about technology and development.
               </p>
             </div>

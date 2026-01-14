@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
-const softSkillIcons = {
+const softSkillIcons: Record<string, string> = {
   "Resilient Decision-Making": "🧭",
   "Cross-Domain Curiosity": "🌐",
   "Vision-to-Execution": "💡",
@@ -58,51 +58,72 @@ const softSkillsDescriptions = [
 ];
 
 const Skills = () => {
-  const ref = useRef(null);
-  const scrollRef = useRef(null);
+  // DOM refs must be typed
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // UI state only
   const [showScrollbar, setShowScrollbar] = useState(false);
-  const [scrollTimeout, setScrollTimeout] = useState(null);
+
+  // timers must use useRef (NOT useState)
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: sectionRef,
     offset: ["start end", "end start"],
   });
+
   const x = useTransform(scrollYProgress, [0, 1], [300, -300]);
 
   const handleScrollStart = () => {
     setShowScrollbar(true);
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    setScrollTimeout(setTimeout(() => setShowScrollbar(false), 2000));
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      setShowScrollbar(false);
+    }, 2000);
   };
 
-  useEffect(
-    () => () => {
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-    },
-    [scrollTimeout]
-  );
+  // cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <section id="skills" ref={ref} className="py-20 bg-slate-900/60 overflow-hidden">
+    <section
+      id="skills"
+      ref={sectionRef}
+      className="py-20 bg-slate-900/60 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             My <span className="gradient-text">Skills</span>
           </h2>
-          <p className="text-gray-400 text-lg">Technologies and expertise I use to bring ideas to life</p>
+          <p className="text-gray-400 text-lg">
+            Technologies and expertise I use to bring ideas to life
+          </p>
         </motion.div>
 
         {/* Scrolling container */}
         <div
           ref={scrollRef}
-          className={`overflow-x-auto overflow-y-hidden pb-6 transition-all duration-300 scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-blue-500 ${
-            showScrollbar ? "opacity-100" : "opacity-100"
+          className={`overflow-x-auto overflow-y-hidden pb-6 transition-opacity duration-300 scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-blue-500 ${
+            showScrollbar ? "opacity-100" : "opacity-70"
           }`}
           style={{ scrollBehavior: "smooth" }}
           onScroll={handleScrollStart}
@@ -110,136 +131,105 @@ const Skills = () => {
           onTouchStart={handleScrollStart}
         >
           <motion.div style={{ x }} className="flex gap-8 min-w-max">
-            {/* Full Stack Development Card */}
+            {/* Full Stack */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0
-              shadow-lg transition-shadow duration-300 hover:shadow-[0_0_32px_8px_rgba(26,90,118,0.5)] hover:scale-105 hover:z-10"
+              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0"
             >
-              <h3 className="text-xl font-semibold text-gray-300 mb-6 border-b border-slate-700 pb-2">
+              <h3 className="text-xl font-semibold text-gray-300 mb-6">
                 Full Stack Development
               </h3>
-              <div className="grid grid-cols-2 gap-x-3 gap-y-3 mb-6 justify-items-center">
+
+              <div className="grid grid-cols-2 gap-3 mb-6">
                 {fullStackSkills.map((skill) => (
                   <div
                     key={skill.name}
-                    className="flex items-center w-full bg-slate-700/40 rounded-full px-3 py-2 min-h-[40px] cursor-default select-none
-                   hover:bg-slate-600/60 transition-colors duration-200 text-sm text-gray-200 font-medium"
-                    title={skill.name}
+                    className="flex items-center bg-slate-700/40 rounded-full px-3 py-2 text-sm text-gray-200"
                   >
                     <img
                       src={skill.logo}
                       alt={`${skill.name} logo`}
-                      className="w-6 h-6 object-contain rounded-full mr-2"
-                      loading="lazy"
+                      className="w-6 h-6 object-contain mr-2"
                     />
                     <span className="truncate">{skill.name}</span>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-center space-x-2 items-center">
-                <span
-                  className="w-4 h-4 rounded-full bg-blue-500"
-                  aria-label="Skill level: Intermediate"
-                ></span>
-                <span className="text-gray-300 uppercase tracking-wide text-xs font-semibold select-none">
-                  Intermediate
-                </span>
-              </div>
             </motion.div>
 
-            {/* AI & Machine Learning Card */}
+            {/* AI/ML */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0
-              shadow-lg transition-shadow duration-300 hover:shadow-[0_0_32px_8px_rgba(26,90,118,0.5)] hover:scale-105 hover:z-10"
+              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0"
             >
-              <h3 className="text-xl font-semibold text-gray-300 mb-6 border-b border-slate-700 pb-2">
-                AI & Machine Learning (Beginner & Growing)
+              <h3 className="text-xl font-semibold text-gray-300 mb-6">
+                AI & Machine Learning
               </h3>
-              <div className="grid grid-cols-2 gap-x-3 gap-y-3 mb-6 justify-items-center">
+
+              <div className="grid grid-cols-2 gap-3">
                 {aiMlSkills.map((skill) => (
                   <div
                     key={skill.name}
-                    className="flex items-center w-full bg-slate-700/40 rounded-full px-3 py-2 min-h-[40px] cursor-default select-none
-                   hover:bg-slate-600/60 transition-colors duration-200 text-sm text-gray-200 font-medium"
-                    title={skill.name}
+                    className="flex items-center bg-slate-700/40 rounded-full px-3 py-2 text-sm text-gray-200"
                   >
                     <img
                       src={skill.logo}
                       alt={`${skill.name} logo`}
-                      className="w-6 h-6 object-contain rounded-full mr-2"
-                      loading="lazy"
+                      className="w-6 h-6 object-contain mr-2"
                     />
                     <span className="truncate">{skill.name}</span>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-center space-x-2 items-center">
-                <span
-                  className="w-4 h-4 rounded-full bg-blue-300"
-                  aria-label="Skill level: Beginner & Growing"
-                ></span>
-                <span className="text-gray-300 uppercase tracking-wide text-xs font-semibold select-none">
-                  Beginner & Growing
-                </span>
-              </div>
             </motion.div>
 
-            {/* Leadership & Management Card */}
+            {/* Leadership */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 1 }}
-              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0
-              shadow-lg transition-shadow duration-300 hover:shadow-[0_0_32px_8px_rgba(26,90,118,0.5)] hover:scale-105 hover:z-10"
+              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0"
             >
-              <h3 className="text-xl font-semibold text-gray-300 mb-6 border-b border-slate-700 pb-2">
+              <h3 className="text-xl font-semibold text-gray-300 mb-6">
                 Leadership & Management
               </h3>
+
               <ul className="list-disc list-inside text-gray-300 space-y-3">
-                {leadershipDescriptions.map((desc, i) => (
-                  <li key={i}>{desc}</li>
+                {leadershipDescriptions.map((desc) => (
+                  <li key={desc}>{desc}</li>
                 ))}
               </ul>
             </motion.div>
 
-            {/* Soft Skills Card */}
+            {/* Soft Skills */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 1.2 }}
-              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0
-              shadow-lg transition-shadow duration-300 hover:shadow-[0_0_32px_8px_rgba(26,90,118,0.5)] hover:scale-105 hover:z-10"
+              className="glass bg-slate-800/75 rounded-xl p-6 min-w-[320px] max-w-[320px] flex-shrink-0"
             >
-              <h3 className="text-xl font-semibold text-gray-300 mb-6 border-b border-slate-700 pb-2">
+              <h3 className="text-xl font-semibold text-gray-300 mb-6">
                 Soft Skills
               </h3>
+
               <div className="space-y-4 text-gray-300">
                 {softSkillsDescriptions.map(({ name, description }) => (
                   <div key={name} className="flex items-start gap-3">
-                    <span className="text-2xl leading-none">
-                      {softSkillIcons[name]}
-                    </span>
-                    <p className="text-sm leading-snug">{description}</p>
+                    <span className="text-2xl">{softSkillIcons[name]}</span>
+                    <p className="text-sm">{description}</p>
                   </div>
                 ))}
               </div>
             </motion.div>
           </motion.div>
-        </div>
-
-        {/* Scroll Instruction */}
-        <div className="flex justify-center mt-4">
-          <div className="text-gray-400 text-sm flex items-center gap-2 select-none">
-            <span>←</span>
-            <span>Scroll to explore all skills</span>
-            <span>→</span>
-          </div>
         </div>
       </div>
     </section>
