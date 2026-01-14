@@ -6,7 +6,8 @@ import { useRef } from 'react';
 
 const About = () => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(ref, { once: true, threshold: 0.3 });
+ const isInView = useInView(ref, { once: true });
+
 
   return (
     <section id="about" className="py-20 bg-slate-800/50">
@@ -58,10 +59,10 @@ const About = () => {
               Currently pursuing B.Tech in Computer Science at Chandigarh University (Batch 2027), focusing on AI/ML, web development, and innovative tech solutions. I hold a published patent in e-commerce innovation and am actively working on new ideas like solar energy sharing, driven by a passion to transform bold concepts into real-world impact.
             </p>
            <p className="text-gray-300 leading-relaxed">
-            Outside academics, I love bringing people and ideas together — whether it's 
+            Outside academics, I love bringing people and ideas together — whether it&apos;s 
             leading events, collaborating on projects, or brainstorming startup concepts. 
-            I’m equally passionate about fitness, travel, and exploring politics, culture, 
-            and philosophy. For me, innovation isn’t just about code — it’s about curiosity, 
+            I&apos;m equally passionate about fitness, travel, and exploring politics, culture, 
+            and philosophy. For me, innovation isn&apos;t just about code — it&apos;s about curiosity, 
             leadership, and creating impact that lasts.
           </p>
 
