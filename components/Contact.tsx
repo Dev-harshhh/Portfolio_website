@@ -6,8 +6,8 @@ import { useRef, useState } from 'react';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, Instagram } from 'lucide-react';
 
 const Contact = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, threshold: 0.3 });
+  const ref = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(ref, { once: true });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
